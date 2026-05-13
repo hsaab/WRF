@@ -18,7 +18,9 @@ macro( wrf_c_preproc_fortran )
 
   set( WRF_PP_F_INCLUDES_FLAGS )
   foreach( WRF_PP_F_INC  ${WRF_PP_F_INCLUDES} )
-    list( APPEND WRF_PP_F_INCLUDES_FLAGS -I${WRF_PP_F_INC} )
+    if ( NOT "${WRF_PP_F_INC}" STREQUAL "" )
+      list( APPEND WRF_PP_F_INCLUDES_FLAGS -I${WRF_PP_F_INC} )
+    endif()
   endforeach()
 
   wrf_expand_definitions( 
@@ -45,7 +47,7 @@ macro( wrf_c_preproc_fortran )
 
     list( 
           APPEND WRF_PP_F_COMMANDS 
-          COMMAND ${CMAKE_C_PREPROCESSOR} ${CMAKE_C_PREPROCESSOR_FLAGS} ${WRF_PP_F_INPUT_SOURCE} ${WRF_PP_F_DEFS} ${WRF_PP_F_INCLUDES_FLAGS} > ${WRF_PP_F_OUTPUT_FILE}
+          COMMAND ${CMAKE_C_PREPROCESSOR} ${CMAKE_C_PREPROCESSOR_FLAGS} ${WRF_PP_F_DEFS} ${WRF_PP_F_INCLUDES_FLAGS} ${WRF_PP_F_INPUT_SOURCE} > ${WRF_PP_F_OUTPUT_FILE}
           # Force check that they were made
           COMMAND ${CMAKE_COMMAND} -E compare_files ${WRF_PP_F_OUTPUT_FILE} ${WRF_PP_F_OUTPUT_FILE}
           )

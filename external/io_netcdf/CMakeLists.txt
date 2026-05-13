@@ -42,6 +42,7 @@ wrf_c_preproc_fortran(
                         OUTPUT_DIR      ${CMAKE_CURRENT_BINARY_DIR}/preproc/
                         EXTENSION       ".f90"
                         INCLUDES        ${FOLDER_COMPILE_TARGET_INCLUDES}
+                                        ${PROJECT_SOURCE_DIR}/external/ioapi_share
                         DEFINITIONS     ${PROJECT_COMPILE_DEFINITIONS}
                         SOURCES         wrf_io.F90
                         )

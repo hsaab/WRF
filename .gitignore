@@ -21,6 +21,7 @@ configure.wrf*
 # Out-of-source build locations
 _build*
 wrf_config.cmake
+install*/
 
 # Executables when not featuring .exe suffix
 ndown
@@ -37,3 +38,6 @@ wrfout_d*
 rsl.out.*
 rsl.error.*
 *.log
+
+# Managed external source checkout
+phys/physics_mmm/
