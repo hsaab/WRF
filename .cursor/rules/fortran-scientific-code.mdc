@@ -1,0 +1,14 @@
+---
+description: Guidance for working with WRF Fortran/C scientific source files
+globs: "**/*.{F,F90,f90,f,c,h}"
+alwaysApply: false
+---
+
+# Fortran Scientific Code
+
+- Match existing Fortran style and source form. Many `.F` files are preprocessed and may rely on compile definitions or generated includes.
+- Follow `USE` relationships, immediate callers, Registry fields, and namelist flags before changing a routine.
+- For numerical routines, identify formulas, constants, units, valid ranges, and expected tolerances.
+- Avoid broad refactors, formatting churn, or renaming in physics/dynamics code unless requested.
+- When recomposing into Python or another language, isolate a small routine first, use visible fixtures, and compare outputs numerically.
+- Be explicit about coverage limits: a few sampled values prove parity for those values, not the whole atmospheric model.

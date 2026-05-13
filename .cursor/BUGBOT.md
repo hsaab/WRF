@@ -1,13 +1,26 @@
-# Bugbot Extracted-Service Review
+# Bugbot WRF Review
 
-When reviewing PRs that add or change an extracted service, prioritize findings that can change production behavior, pricing, checkout totals, security posture, or merge-time verification.
+When reviewing WRF changes, prioritize findings that can change numerical behavior, build portability, generated-code correctness, or model output reproducibility.
 
-For legacy-to-service extractions:
+For Fortran/C scientific-code changes:
 
-- Compare service defaults against legacy defaults when an optional request field affects money, validation, eligibility, routing, security, or persisted behavior. Flag missing explicit defaults at the service boundary.
-- Check that validation and calculation agree. If validation accepts or exempts a request because a field exists, confirm the calculation path uses the same condition and cannot silently ignore that field.
-- Verify legacy-derived behavior is covered at the service API boundary, not only in private helper tests. Look for tests covering happy paths, edge cases, invalid inputs, default behavior, and legacy configuration flags.
-- When a PR adds a new deployable service, verify it is wired into repo-level CI/build/test execution or that the PR explicitly marks it as a non-deployed prototype. Flag services with their own package manifest, test command, build command, or lockfile that can merge without those commands running.
-- If the service is meant to replace or back a legacy path, verify there is either adapter/integration wiring or a clear statement that wiring is out of scope. Do not treat an unwired service as production-ready.
-- Prefer findings with concrete blast radius: wrong customer totals, merchant under/overcharging, checkout regressions, security leakage, or untested deployable code.
-- Do not require broad adapter/UI integration unless the PR claims the legacy app now uses the service.
+- Check whether the change affects physics, dynamics, Registry fields, generated includes, namelist options, or I/O formats.
+- Verify formulas, constants, units, dimensions, and valid ranges when numerical logic changes.
+- Look for unintended behavior changes from source-form preprocessing, missing `-D`/`-I` flags, generated include ordering, or CMake/configure changes.
+- Require focused verification for the touched path: a unit-style fixture, idealized case smoke run, or explicit parity comparison against prior Fortran output.
+- Flag generated artifacts accidentally added to a PR, including `_build*`, `install*`, `wrfout*`, `wrfinput*`, `*.o`, `*.mod`, `*.exe`, `*.nc`, and `rsl.*`.
+- For recomposed Python or service logic, verify output parity against the Fortran reference with documented tolerances and coverage limits.
+- Prefer findings with concrete scientific or engineering blast radius: wrong units, changed state dimensions, broken build path, altered physics option behavior, or unverified numerical drift.
+
+For Python microservices that recompose WRF behavior:
+
+- Verify the service uses the same source-of-truth formula, constants, phase logic, lookup-table behavior, and units as the referenced Fortran routine.
+- Check for Celsius/Kelvin mistakes, pressure unit mistakes (`Pa` vs `hPa`), mixing ratio vs specific humidity confusion, and relative humidity expressed as fraction vs percent.
+- Require a visible Fortran reference fixture and a parity test that runs the Python implementation on the same inputs.
+- Flag tests that only assert response shape, status codes, or broad ranges without comparing against Fortran reference output.
+- Flag tolerances that are too loose to catch scientific regressions, or tolerance checks that compare rounded strings instead of numeric values.
+- Confirm edge cases are covered around phase transitions, saturation limits, freezing temperatures, very warm temperatures, low/high pressure, and invalid inputs.
+- Check that API validation preserves scientific meaning: reject ambiguous units, require documented input units, and avoid silent default conversions.
+- Do not accept a claim of parity unless the PR reports compared fields, max/mean absolute error, max relative error where meaningful, tolerances, failures, and coverage limits.
+- Make demo findings concrete. A good finding points to a specific request/fixture row where Python output diverges from Fortran enough to change a humidity, saturation, or tendency calculation.
+- Do not invent demo findings. If the seeded issue is not supported by the PR diff, fixture output, or tests, report that no concrete issue was found and name any remaining review gaps.

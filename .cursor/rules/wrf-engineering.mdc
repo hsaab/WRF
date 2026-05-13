@@ -1,0 +1,14 @@
+---
+description: Core WRF engineering guidance for this Fortran/C scientific model
+alwaysApply: true
+---
+
+# WRF Engineering
+
+- Treat this repository as a large scientific Fortran/C model with generated code, optional physics packages, and environment-sensitive builds.
+- Before proposing edits, identify whether the file is source, generated Registry output, a build artifact, an installed test copy, or runtime data.
+- Prefer read-only exploration before changes: trace entrypoints, callers, namelist/Registry configuration, and units before touching numerical code.
+- Preserve numerical behavior unless the user explicitly asks to change it. For modernization work, create parity fixtures and compare against the original implementation.
+- For Python microservices or recomposition demos, keep ownership narrow: the new code owns only the selected routine or calculation being extracted; WRF/Fortran remains the source of truth.
+- Use build/run hygiene for generated model outputs, build/install artifacts, NetCDF dumps, and runtime files.
+- When explaining code to engineers new to Fortran, translate `MODULE`, `USE`, generated includes, array dimensions, and physical units into plain engineering terms.

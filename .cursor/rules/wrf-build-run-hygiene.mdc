@@ -1,0 +1,15 @@
+---
+description: Build, run, and artifact hygiene for WRF workflows
+alwaysApply: false
+---
+
+# WRF Build And Run Hygiene
+
+Use this rule for WRF build, configure, install, idealized-case, runtime-output, or artifact-staging work.
+
+- Prefer out-of-source build/install directories such as `_build*` and `install*`; keep generated artifacts ignored.
+- For quick model proof, prefer idealized cases before WPS or real-weather workflows: `em_b_wave`, `em_grav2d_x`, or `em_quarter_ss`.
+- Before long builds or simulations, confirm the target case, build directory, install directory, MPI/OpenMP settings, and expected runtime.
+- For smoke runs, shorten `namelist.input` in an installed or ignored test copy, not the source test case unless requested.
+- Inspect NetCDF output with tools such as `ncdump`; do not try to open binary `wrfout*` files as text.
+- Do not stage `wrfout*`, `wrfinput*`, `wrfbdy*`, `rsl.*`, `*.o`, `*.mod`, binaries, build directories, or installed test artifacts unless explicitly requested.
